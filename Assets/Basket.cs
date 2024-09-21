@@ -1,10 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Basket : MonoBehaviour
 {
     public ScoreCounter scoreCounter;
+    static private Text     ScoreText;
+    public int lastLevel;
+    public static int level;
     // Start is called before the first frame update
     void Start()
     {
@@ -35,7 +40,17 @@ public class Basket : MonoBehaviour
             Destroy( collidedWith);
             scoreCounter.score += 100;
             HighScore.TRY_SET_HIGH_SCORE( scoreCounter.score );
+            level = scoreCounter.score % 1000;
+            if (level == 0 ) {
+                AppleTree.appleDropDelay = AppleTree.appleDropDelay - (float)(0.01*(((scoreCounter.score/1000)+1)));
+                RoundText.round = (scoreCounter.score/1000) + 1;
+            }
+        }else if ( collidedWith.CompareTag("Branch" )) {
+            Destroy( collidedWith);
+            HighScore.TRY_SET_HIGH_SCORE( scoreCounter.score );
+            SceneManager.LoadScene( "End_Menu");
+            }
         }
+        
+    }
 
-        }
-}

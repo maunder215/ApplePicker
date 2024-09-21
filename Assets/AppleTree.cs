@@ -7,6 +7,7 @@ public class AppleTree : MonoBehaviour
     [Header("Inscribed")]
     // Prefab for instantiating apples
     public GameObject applePrefab;
+    public GameObject branchPrefab;
 
     // speed at which the AppleTree moves
     public float speed = 30f; 
@@ -18,19 +19,28 @@ public class AppleTree : MonoBehaviour
     public float changeDirChance = 0.02f;
 
     // Seconds between Apples instantiations
-    public float appleDropDelay = 0.75f;
+    public static float appleDropDelay = 0.75f;
+    public static float BranchDropDelay = appleDropDelay*8;
+
 
     // Start is called before the first frame update
     void Start()
     {
         // Star dropping apples         // b
         Invoke( "DropApple", 2f );
+        Invoke( "DropBranch", 2f );
     }
 
     void DropApple() {
         GameObject apple = Instantiate<GameObject>(applePrefab);
         apple.transform.position = transform.position;
         Invoke( "DropApple", appleDropDelay);
+    }
+
+    void DropBranch() {
+        GameObject branch = Instantiate<GameObject>(branchPrefab);
+        branch.transform.position = transform.position;
+        Invoke( "DropBranch", BranchDropDelay);
     }
 
     // Update is called once per frame
@@ -46,10 +56,10 @@ public class AppleTree : MonoBehaviour
             speed = Mathf.Abs( speed );
         } else if  (pos.x > leftAndRightEdge ) {
             speed = -Mathf.Abs( speed );
-        } //else if ( Random.value < changeDirChance ){
-        //     speed *= -1;
-        // }
+        } 
+        
     }
+
 
     void FixedUpdate() {
         // Random direction changes are now time-based due to the FixedUpdate()
@@ -58,3 +68,4 @@ public class AppleTree : MonoBehaviour
         }
     }
 }
+
